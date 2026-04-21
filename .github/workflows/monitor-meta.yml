@@ -1,0 +1,148 @@
+name: Daily GitHub Meta IP Monitor
+
+on:
+  schedule:
+    # Run daily at 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual triggers
+
+permissions:
+  contents: write
+
+jobs:
+  check-meta-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch and compare GitHub Meta API
+        run: |
+          set -e
+
+          # Fetch current meta data
+          echo "Fetching GitHub Meta API..."
+          curl -sS -H "Accept: application/json" https://api.github.com/meta -o /tmp/meta-current.json
+
+          # Services that contain IP ranges
+          SERVICES="hooks web api git github_enterprise_importer packages pages importer actions actions_macos codespaces copilot dependabot"
+
+          # Extract only IP range arrays from current
+          echo "{}" > /tmp/current-ranges.json
+          for service in $SERVICES; do
+            jq -r --arg s "$service" \
+              'if .[$s] | type == "array" then {($s): .[$s]} else empty end' \
+              /tmp/meta-current.json > /tmp/svc-tmp.json 2>/dev/null || true
+            if [ -s /tmp/svc-tmp.json ] && [ "$(cat /tmp/svc-tmp.json)" != "" ]; then
+              jq -s '.[0] * .[1]' /tmp/current-ranges.json /tmp/svc-tmp.json > /tmp/merged.json
+              mv /tmp/merged.json /tmp/current-ranges.json
+            fi
+          done
+
+          # Load previous snapshot
+          PREV_FILE="data/meta-snapshot.json"
+          if [ ! -f "$PREV_FILE" ] || [ "$(cat "$PREV_FILE")" = "{}" ]; then
+            echo "No previous snapshot found. Saving initial snapshot."
+            cp /tmp/current-ranges.json "$PREV_FILE"
+            echo "CHANGES_FOUND=false" >> $GITHUB_ENV
+            exit 0
+          fi
+
+          # Compare and find differences
+          echo "Comparing with previous snapshot..."
+
+          python3 << 'PYTHON_SCRIPT'
+          import json
+          import sys
+          from datetime import datetime, timezone
+
+          with open('/tmp/current-ranges.json', 'r') as f:
+              current = json.load(f)
+          with open('data/meta-snapshot.json', 'r') as f:
+              previous = json.load(f)
+
+          changes = []
+
+          all_services = set(list(current.keys()) + list(previous.keys()))
+
+          for service in sorted(all_services):
+              curr_ranges = set(current.get(service, []))
+              prev_ranges = set(previous.get(service, []))
+
+              added = curr_ranges - prev_ranges
+              removed = prev_ranges - curr_ranges
+
+              for r in sorted(added):
+                  changes.append({
+                      "type": "added",
+                      "service": service,
+                      "range": r
+                  })
+
+              for r in sorted(removed):
+                  changes.append({
+                      "type": "removed",
+                      "service": service,
+                      "range": r
+                  })
+
+          if not changes:
+              print("No changes detected.")
+              with open('/tmp/changes-found', 'w') as f:
+                  f.write('false')
+              sys.exit(0)
+
+          print(f"Found {len(changes)} changes!")
+
+          # Load existing updates
+          try:
+              with open('data/updates.json', 'r') as f:
+                  updates = json.load(f)
+          except (FileNotFoundError, json.JSONDecodeError):
+              updates = []
+
+          # Add new update entry at the beginning
+          today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+          update_entry = {
+              "date": today,
+              "changes": changes
+          }
+
+          updates.insert(0, update_entry)
+
+          # Keep only last 90 days of updates
+          updates = updates[:90]
+
+          with open('data/updates.json', 'w') as f:
+              json.dump(updates, f, indent=2)
+
+          with open('/tmp/changes-found', 'w') as f:
+              f.write('true')
+
+          # Print summary
+          added_count = sum(1 for c in changes if c['type'] == 'added')
+          removed_count = sum(1 for c in changes if c['type'] == 'removed')
+          print(f"  Added: {added_count}")
+          print(f"  Removed: {removed_count}")
+
+          # Print affected services
+          affected = set(c['service'] for c in changes)
+          print(f"  Affected services: {', '.join(sorted(affected))}")
+          PYTHON_SCRIPT
+
+          CHANGES=$(cat /tmp/changes-found 2>/dev/null || echo "false")
+          echo "CHANGES_FOUND=$CHANGES" >> $GITHUB_ENV
+
+          # Update snapshot regardless
+          cp /tmp/current-ranges.json "$PREV_FILE"
+
+      - name: Commit and push changes
+        if: env.CHANGES_FOUND == 'true' || !contains(github.event_name, 'schedule')
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/
+          git diff --staged --quiet && echo "No changes to commit" && exit 0
+          DATE=$(date -u +%Y-%m-%d)
+          git commit -m "Update GitHub Meta IP data - ${DATE}"
+          git push
