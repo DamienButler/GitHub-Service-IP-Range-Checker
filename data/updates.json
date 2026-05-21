@@ -1,5 +1,850 @@
 [
   {
+    "date": "2026-05-21",
+    "changes": [
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.143.196.0/23"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.0/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.112/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.122/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.124/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.128/25"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.32/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.48/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.56/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.64/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.92.96/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.0/26"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.112/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.120/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.124/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.132/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.136/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.144/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.156/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.160/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.192/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.200/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.204/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.212/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.216/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.224/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.64/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.93.96/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.95.128/26"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.95.192/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.95.224/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "20.20.95.240/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:401:b00::/60"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:401:b10::/61"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:804:600::/57"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:804:680::/62"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:9:3f0::/62"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:9:3f8::/61"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:9:404::/63"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:9:42e::/63"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:9:640::/59"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:9:6e0::/60"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "2603:1030:9:6f8::/63"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "40.123.171.120/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "40.123.171.24/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "40.123.171.32/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "40.123.171.64/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "40.123.171.96/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.10.96/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.12.0/26"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.12.128/25"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.12.64/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.12.68/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.12.72/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.12.80/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.12.96/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.0/25"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.128/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.136/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.140/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.144/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.148/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.170/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.174/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.178/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.182/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.186/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.190/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.194/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.198/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.202/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.206/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.210/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.214/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.216/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.224/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.228/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.232/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.13.240/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.14.0/23"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.35.0/26"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.35.112/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.35.64/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.35.96/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.50.48/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.50.64/28"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.50.80/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.50.88/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.50.92/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.57.48/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.73.0/26"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.73.64/29"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.73.72/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.77.0/27"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.77.32/30"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.77.36/31"
+      },
+      {
+        "type": "added",
+        "service": "actions",
+        "range": "57.157.9.128/25"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "20.20.92.0/23"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "20.20.95.128/28"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "20.20.95.144/29"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "20.20.95.152/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:401:b00::/62"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:401:b04::/63"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:401:b06::/64"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:804:600::/58"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:804:640::/59"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:804:660::/60"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:804:670::/61"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:804:678::/62"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:3f1::/64"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:3f2::/63"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:3f8::/63"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:3fb::/64"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:3fc::/62"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:405::/64"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:42f::/64"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:640::/61"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:648::/63"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:64b::/64"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:64c::/62"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:650::/61"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:658::/62"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:65d::/64"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:65e::/63"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:6e0::/62"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:6e5::/64"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:6e6::/63"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:6e8::/61"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "2603:1030:9:6f8::/64"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.100/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.104/29"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.122/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.124/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.24/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.28/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.32/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.36/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.40/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.44/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.48/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.52/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.56/29"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.64/29"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.72/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.76/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "40.123.171.96/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.10.100/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.10.96/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.12.0/22"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.35.0/27"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.35.32/28"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.35.48/29"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.35.56/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.50.48/29"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.50.56/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.57.48/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.73.0/27"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.73.32/28"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.73.48/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.77.0/28"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.77.16/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.77.20/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.9.128/27"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.9.160/29"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.9.168/30"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.9.172/31"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.9.176/28"
+      },
+      {
+        "type": "removed",
+        "service": "actions",
+        "range": "57.157.9.192/26"
+      }
+    ]
+  },
+  {
     "date": "2026-05-12",
     "changes": [
       {
