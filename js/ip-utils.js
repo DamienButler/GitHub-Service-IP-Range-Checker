@@ -29,11 +29,11 @@ const IPUtils = (() => {
         ip = ip.split('%')[0];
 
         // Handle :: expansion
-        let parts = ip.split('::');
+        const parts = ip.split('::');
         if (parts.length > 2) return null;
 
         let head = parts[0] ? parts[0].split(':') : [];
-        let tail = parts.length === 2 ? (parts[1] ? parts[1].split(':') : []) : [];
+        const tail = parts.length === 2 ? (parts[1] ? parts[1].split(':') : []) : [];
 
         if (parts.length === 1) {
             // No :: present

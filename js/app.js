@@ -20,6 +20,7 @@
     // ===== State =====
     let metaData = null;
     let updatesData = null;
+    let bulkResults = null;
 
     // ===== DOM Elements =====
     const ipInput = document.getElementById('ip-input');
@@ -31,6 +32,15 @@
     const updatesContainer = document.getElementById('updates-container');
     const apiStatus = document.getElementById('api-status');
     const statusDot = document.querySelector('.status-dot');
+
+    // Bulk mode elements
+    const bulkInput = document.getElementById('bulk-input');
+    const bulkCheckBtn = document.getElementById('bulk-check-btn');
+    const bulkClearBtn = document.getElementById('bulk-clear-btn');
+    const fileInput = document.getElementById('file-input');
+    const fileName = document.getElementById('file-name');
+    const bulkResultsSection = document.getElementById('bulk-results-section');
+    const bulkResultsContainer = document.getElementById('bulk-results-container');
 
     // ===== Initialization =====
     async function init() {
@@ -73,6 +83,79 @@
                 btn.classList.add('active');
                 document.getElementById(`${btn.dataset.tab}-tab`).classList.add('active');
             });
+        });
+
+        // Mode toggle (Single / Bulk)
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(`${btn.dataset.mode}-mode`).classList.add('active');
+
+                // Hide the other mode's results
+                if (btn.dataset.mode === 'single') {
+                    bulkResultsSection.classList.add('hidden');
+                } else {
+                    resultsSection.classList.add('hidden');
+                }
+            });
+        });
+
+        // Bulk check
+        bulkCheckBtn.addEventListener('click', performBulkCheck);
+
+        bulkClearBtn.addEventListener('click', () => {
+            bulkInput.value = '';
+            fileInput.value = '';
+            fileName.textContent = '';
+            bulkResultsSection.classList.add('hidden');
+            bulkResults = null;
+            bulkInput.focus();
+        });
+
+        // Ctrl/Cmd + Enter to run bulk check
+        bulkInput.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') performBulkCheck();
+        });
+
+        // File upload
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const existing = bulkInput.value.trim();
+                bulkInput.value = existing ? `${existing}\n${ev.target.result}` : ev.target.result;
+                fileName.textContent = file.name;
+            };
+            reader.onerror = () => {
+                fileName.textContent = 'Failed to read file';
+            };
+            reader.readAsText(file);
+        });
+
+        // Drag & drop onto the textarea
+        bulkInput.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            bulkInput.classList.add('drag-over');
+        });
+        bulkInput.addEventListener('dragleave', () => {
+            bulkInput.classList.remove('drag-over');
+        });
+        bulkInput.addEventListener('drop', (e) => {
+            e.preventDefault();
+            bulkInput.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const existing = bulkInput.value.trim();
+                bulkInput.value = existing ? `${existing}\n${ev.target.result}` : ev.target.result;
+                fileName.textContent = file.name;
+            };
+            reader.readAsText(file);
         });
     }
 
@@ -154,6 +237,225 @@
 
         return results;
     }
+
+    // ===== Bulk Check =====
+
+    /**
+     * Parse a blob of text into a list of unique IP/CIDR entries.
+     * Accepts commas, spaces, tabs, semicolons and newlines as separators.
+     * Ignores blank lines and lines starting with # or //.
+     */
+    function parseBulkInput(text) {
+        const entries = [];
+        const seen = new Set();
+
+        const lines = text.split(/\r?\n/);
+
+        for (const rawLine of lines) {
+            // Strip comments
+            const line = rawLine.split('#')[0].split('//')[0].trim();
+            if (!line) continue;
+
+            // Split on comma / semicolon / whitespace
+            const tokens = line.split(/[,;\s]+/);
+
+            for (const token of tokens) {
+                // Trim quotes and stray punctuation used by CSV exports
+                const cleaned = token.trim().replace(/^["']+|["']+$/g, '').replace(/\.$/, '');
+                if (!cleaned) continue;
+
+                const key = cleaned.toLowerCase();
+                if (seen.has(key)) continue;
+                seen.add(key);
+                entries.push(cleaned);
+            }
+        }
+
+        return entries;
+    }
+
+    function performBulkCheck() {
+        const raw = bulkInput.value;
+
+        if (!raw.trim()) {
+            showBulkError('Please paste or upload a list of IP addresses or CIDR ranges.');
+            return;
+        }
+
+        if (!metaData) {
+            showBulkError('GitHub Meta data is still loading. Please try again in a moment.');
+            return;
+        }
+
+        const entries = parseBulkInput(raw);
+
+        if (entries.length === 0) {
+            showBulkError('No valid entries found in the supplied list.');
+            return;
+        }
+
+        const results = entries.map(entry => {
+            if (!IPUtils.isValidInput(entry)) {
+                return { input: entry, status: 'invalid', services: [], ranges: [] };
+            }
+
+            const matches = findMatches(entry);
+
+            if (matches.length === 0) {
+                return { input: entry, status: 'no-match', services: [], ranges: [] };
+            }
+
+            // Group unique services and ranges
+            const services = [...new Set(matches.map(m => m.service))];
+            const ranges = [...new Set(matches.map(m => m.range))];
+
+            return { input: entry, status: 'match', services, ranges };
+        });
+
+        bulkResults = results;
+        renderBulkResults(results);
+    }
+
+    function renderBulkResults(results) {
+        // Make sure single-result panel is hidden
+        resultsSection.classList.add('hidden');
+        bulkResultsSection.classList.remove('hidden');
+
+        const matched = results.filter(r => r.status === 'match').length;
+        const noMatch = results.filter(r => r.status === 'no-match').length;
+        const invalid = results.filter(r => r.status === 'invalid').length;
+
+        let html = `
+            <div class="result-card">
+                <div class="result-header bulk-result-header">
+                    <div class="bulk-summary">
+                        <div class="bulk-summary-title">Bulk Check Results</div>
+                        <div class="bulk-summary-stats">
+                            <span class="stat-pill stat-total">${results.length} checked</span>
+                            <span class="stat-pill stat-match">${matched} in range</span>
+                            ${noMatch > 0 ? `<span class="stat-pill stat-nomatch">${noMatch} not in range</span>` : ''}
+                            ${invalid > 0 ? `<span class="stat-pill stat-invalid">${invalid} invalid</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="download-btn-group">
+                        <button class="download-btn" onclick="downloadBulkResults('csv')" title="Download results as CSV">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            CSV
+                        </button>
+                        <button class="download-btn" onclick="downloadBulkResults('json')" title="Download results as JSON">
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                            JSON
+                        </button>
+                    </div>
+                </div>
+                <div class="bulk-table-wrapper">
+                    <table class="bulk-table">
+                        <thead>
+                            <tr>
+                                <th>Input</th>
+                                <th>Status</th>
+                                <th>Service(s)</th>
+                                <th>Matched Range(s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+        for (const r of results) {
+            let rowClass, statusBadge, servicesCell, rangesCell;
+
+            if (r.status === 'match') {
+                rowClass = 'row-match';
+                statusBadge = '<span class="status-badge badge-in-range">In Range</span>';
+                servicesCell = r.services
+                    .map(s => `<span class="match-service service-${s}">${formatServiceName(s)}</span>`)
+                    .join(' ');
+                rangesCell = r.ranges
+                    .map(x => `<code class="range-code">${escapeHTML(x)}</code>`)
+                    .join(' ');
+            } else if (r.status === 'no-match') {
+                rowClass = 'row-nomatch';
+                statusBadge = '<span class="status-badge badge-not-in-range">Not In Range</span>';
+                servicesCell = '<span class="cell-empty">—</span>';
+                rangesCell = '<span class="cell-empty">—</span>';
+            } else {
+                rowClass = 'row-invalid';
+                statusBadge = '<span class="status-badge badge-invalid">Invalid</span>';
+                servicesCell = '<span class="cell-empty">Not a valid IP or CIDR</span>';
+                rangesCell = '<span class="cell-empty">—</span>';
+            }
+
+            html += `
+                <tr class="${rowClass}">
+                    <td class="cell-input"><code>${escapeHTML(r.input)}</code></td>
+                    <td>${statusBadge}</td>
+                    <td class="cell-services">${servicesCell}</td>
+                    <td class="cell-ranges">${rangesCell}</td>
+                </tr>`;
+        }
+
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>`;
+
+        bulkResultsContainer.innerHTML = html;
+        bulkResultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function showBulkError(message) {
+        bulkResultsSection.classList.remove('hidden');
+        bulkResultsContainer.innerHTML = `
+            <div class="result-card">
+                <div class="result-header">
+                    <div class="result-icon not-found">!</div>
+                    <div>
+                        <div class="result-title">Error</div>
+                        <div class="result-subtitle">${escapeHTML(message)}</div>
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    window.downloadBulkResults = function (format) {
+        if (!bulkResults) return;
+
+        const today = new Date().toISOString().split('T')[0];
+
+        const statusLabel = {
+            'match': 'In Range',
+            'no-match': 'Not In Range',
+            'invalid': 'Invalid'
+        };
+
+        if (format === 'csv') {
+            let csv = 'input,status,services,matched_ranges\n';
+            for (const r of bulkResults) {
+                const services = r.services.map(formatServiceName).join('; ');
+                const ranges = r.ranges.join('; ');
+                csv += `"${r.input}","${statusLabel[r.status]}","${services}","${ranges}"\n`;
+            }
+            generateDownload(`github-meta-bulk-check-${today}.csv`, csv, 'text/csv');
+        } else if (format === 'json') {
+            const payload = {
+                source: META_API_URL,
+                checked: today,
+                total: bulkResults.length,
+                summary: {
+                    in_range: bulkResults.filter(r => r.status === 'match').length,
+                    not_in_range: bulkResults.filter(r => r.status === 'no-match').length,
+                    invalid: bulkResults.filter(r => r.status === 'invalid').length
+                },
+                results: bulkResults.map(r => ({
+                    input: r.input,
+                    status: statusLabel[r.status],
+                    services: r.services,
+                    matched_ranges: r.ranges
+                }))
+            };
+            generateDownload(`github-meta-bulk-check-${today}.json`, JSON.stringify(payload, null, 2), 'application/json');
+        }
+    };
 
     // ===== Rendering =====
     function renderResults(input, matches) {

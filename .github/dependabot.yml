@@ -1,0 +1,19 @@
+version: 2
+
+updates:
+  # Keep GitHub Actions used in workflows up to date.
+  # This is the project's only dependency surface — there are no npm packages.
+  # Catches deprecations (e.g. the Node 20 -> Node 24 runner migration) early.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
